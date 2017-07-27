@@ -4,7 +4,7 @@
 
 JavaScript提供定时执行代码的功能，叫做定时器（timer），主要由setTimeout()和setInterval()这两个函数来完成。它们向任务队列添加定时任务。初始接触它的人都觉得好简单，实时上真的如此么？这里记载下，一路对其使用姿势变迁的历程。
 
-1, setTimeout()基础
+# 1, setTimeout()基础
 
 setTimeout函数用来指定某个函数或某段代码，在多少毫秒之后执行。它返回一个整数，表示定时器的编号，以后可以用来取消这个定时器。
 ``
@@ -107,7 +107,7 @@ console.log("fuck");
 请问最后打印的是多少?其正确答案是，取决于后面同步执行的js需要占用多少时间。
 即为：MAX(同步执行的时间, 100)；缘何如此，就得看下setTimeout运行机制了。
 
-2, setTimeout运行机制
+# 2, setTimeout运行机制
 
 setTimeout和setInterval的运行机制是，将指定的代码移出本次执行，等到下一轮Event Loop时，再检查是否到了指定时间。如果到了，就执行对应的代码；如果不到，就等到再下一轮Event Loop时重新判断。这意味着，setTimeout指定的代码，必须等到本次执行的所有代码都执行完，才会执行。
 
@@ -118,7 +118,7 @@ veryLongTask();
 ```
 上面代码的setTimeout，指定100毫秒以后运行一个任务。但是，如果后面立即运行的任务（当前脚本的同步任务））非常耗时，过了100毫秒还无法结束，那么被推迟运行的someTask就只有等着，等到前面的veryLongTask运行结束，才轮到它执行。
 
-3, setTimeout(func,0)
+# 3, setTimeout(func,0)
 
 在使用backbone框架写代码的时候，因为些需求因素，新手总会在render时操纵下dom，却发现改变dom元素状态，代码没有问题，界面却没有变更。而使用setTimeout(func,time)却能解决这个问题，即便time=0;探究一番，真相只有一个：
 
@@ -182,9 +182,9 @@ console.log("当前任务结束");
 
 另一方面，浏览器内部使用32位带符号的整数，来储存推迟执行的时间。这意味着setTimeout最多只能推迟执行2147483647毫秒（24.8天），超过这个时间会发生溢出，导致回调函数将在当前任务队列结束后立即执行，即等同于setTimeout(f,0)的效果。
 
-4, setTimeout(f,0)应用
+# 4, setTimeout(f,0)应用
 
-##调整事件的发生顺序
+## 调整事件的发生顺序
 
 setTimeout(f,0)有几个非常重要的用途。
 它的一大应用是，可以调整事件的发生顺序。
@@ -222,7 +222,7 @@ document.getElementById('my-ok').onkeypress = function() {
 }
 上面代码将代码放入setTimeout之中，就能使得它在浏览器接收到文本之后触发;原来如此：这也就解释了缘何在使用backbone调用render之时，操纵dom是无效的了，因为当时连dom元素都还没获取到(为何没报错？这牵扯到另一个话题),自然等页面渲染完毕了也没见想要的结果了。
 
- ##分割耗时任何
+## 分割耗时任何
 
 众所周知javascript是单线程的，特点就是容易出现阻塞。如果一段程序处理时间很长，很容易导致整个页面hold住。什么交互都处理不了怎么办？
 
@@ -252,7 +252,7 @@ timer = setTimeout(func, 0);
 
 另一个使用这种技巧的例子是，代码高亮的处理。如果代码块很大，就会分成一个个小块，写成诸如setTimeout(highlightNext, 50)的样子，进行分块处理。
 
-5, clearTimeout()
+# 5, clearTimeout()
 
 setTimeout和setInterval函数，都返回一个表示计数器编号的整数值，将该整数传入clearTimeout和clearInterval函数，就可以取消对应的定时器。
 
